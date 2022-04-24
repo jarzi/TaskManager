@@ -19,7 +19,8 @@ namespace TasksWebApi.Repositories
         public async Task<int> CreateTaskItemAsync(TaskItem taskItem)
         {
             _taskItemsContext.TaskItems.Add(taskItem);
-            return await _taskItemsContext.SaveChangesAsync();
+            await _taskItemsContext.SaveChangesAsync();
+            return taskItem.Id;
         }
 
         public async Task<TaskItem> GetTaskItemAsync(int id)
@@ -38,7 +39,8 @@ namespace TasksWebApi.Repositories
             _taskItemsContext.TaskItems.Update(taskItem);
             try
             {
-                id = await _taskItemsContext.SaveChangesAsync();
+                await _taskItemsContext.SaveChangesAsync();
+                id = taskItem.Id;
             }
             catch (DbUpdateConcurrencyException) when (!_taskItemsContext.TaskItems.Any(t => t.Id == taskItem.Id))
             {
